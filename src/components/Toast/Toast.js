@@ -1,38 +1,35 @@
-import React from 'react';
-import {
-  AlertOctagon,
-  AlertTriangle,
-  CheckCircle,
-  Info,
-  X,
-} from 'react-feather';
+import React from 'react'
+import { AlertOctagon, AlertTriangle, CheckCircle, Info, X } from 'react-feather'
 
-import VisuallyHidden from '../VisuallyHidden';
+import VisuallyHidden from '../VisuallyHidden'
+import { ToastContext } from '../ToastProvider'
 
-import styles from './Toast.module.css';
+// @ts-ignore
+import styles from './Toast.module.css'
 
 const ICONS_BY_VARIANT = {
   notice: Info,
   warning: AlertTriangle,
   success: CheckCircle,
   error: AlertOctagon,
-};
+}
 
-function Toast() {
+function Toast({ id, variant, children }) {
+  const Icon = ICONS_BY_VARIANT[variant]
+  // @ts-ignore
+  const { handleDismiss } = React.useContext(ToastContext)
   return (
-    <div className={`${styles.toast} ${styles.notice}`}>
+    <div className={`${styles.toast} ${styles[variant]}`}>
       <div className={styles.iconContainer}>
-        <Info size={24} />
+        <Icon size={24} />
       </div>
-      <p className={styles.content}>
-        16 photos have been uploaded
-      </p>
-      <button className={styles.closeButton}>
+      <p className={styles.content}>{children}</p>
+      <button className={styles.closeButton} onClick={() => handleDismiss(id)}>
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
-  );
+  )
 }
 
-export default Toast;
+export default Toast
